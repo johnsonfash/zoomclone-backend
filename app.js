@@ -23,5 +23,9 @@ io.on('connection', (socket) => {
   })
 })
 
+app.get('/test', (req, res) => {
+  res.send('TEST');
+})
+
 let port = process.env.PORT || 5000;
 server.listen(port, () => console.log('server started at port: ' + port));
