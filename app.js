@@ -28,8 +28,10 @@ io.on('connection', (socket) => {
     socket.on('typing', (data) => {
       socket.broadcast.emit('newTyper', data);
     })
-    socket.on('hangup', (data) => {
-      io.to(roomId).emit('hangUp', data)
+    // edited
+    socket.on('hangup', (userID, peerID) => {
+      // edited
+      io.to(roomId).emit('hangUp', userID, peerID)
     })
   })
 })
