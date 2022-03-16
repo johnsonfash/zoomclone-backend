@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const uuid = require('./helper/uuid');
 const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(server, { debug: true });
