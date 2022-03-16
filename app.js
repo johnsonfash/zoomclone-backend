@@ -5,6 +5,17 @@ const io = require('socket.io')(server, { serveClient: false, origins: '*', cors
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(server, { debug: true });
 
+
+
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https')
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    else
+      next()
+  })
+}
+
 app.use('/peerjs', peerServer);
 
 io.on('connection', (socket) => {
