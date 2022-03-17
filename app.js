@@ -21,17 +21,17 @@ app.use('/peerjs', peerServer);
 io.on('connection', (socket) => {
   socket.on("join-room", ({ roomId, peerID, userID, userName }) => {
     socket.join(roomId);
-    io.to(roomId).emit('userConnected', { peerID, userID, userName });
+    socket.to(roomId).broadcast.emit('userConnected', { peerID, userID, userName });
     socket.on('message', (obj) => {
-      io.to(roomId).emit('newMessage', obj)
+      socket.to(roomId).emit('newMessage', obj)
     });
     socket.on('typing', (data) => {
-      socket.broadcast.emit('newTyper', data);
+      socket.to(roomId).broadcast.emit('newTyper', data);
     })
     // edited
     socket.on('hangup', ({ userID, peerID }) => {
       // edited
-      io.to(roomId).emit('hangUp', { userID, peerID })
+      socket.to(roomId).emit('hangUp', { userID, peerID })
     })
   })
 })
