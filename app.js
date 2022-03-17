@@ -21,7 +21,7 @@ app.use('/peerjs', peerServer);
 io.on('connection', (socket) => {
   socket.on("join-room", (roomId, peerID, userID, userName) => {
     socket.join(roomId);
-    io.to(roomId).emit("user-connected", peerID, userID, userName);
+    socket.to(roomId).emit('userConnected', { peerID, userID, userName });
     socket.on('message', (obj) => {
       io.to(roomId).emit('newMessage', obj)
     });
