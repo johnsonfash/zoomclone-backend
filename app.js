@@ -1,13 +1,11 @@
 const express = require('express');
-const cors = require('cors');
 const app = express();
 const server = require('http').Server(app);
-// const io = require('socket.io')(server, { serveClient: false, origins: 'https://zuum.herokuapp.com', cors: { origin: 'https://zuum.herokuapp.com' } });
+// const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
 const io = require('socket.io')(server, { origins: '*', cors: { origin: '*' } });
-// const io = require('socket.io')(server);
-// const io = require('socket.io')(server, { cors: { origin: 'https://zuum.herokuapp.com', methods: ['GET', 'PUT', 'POST'] } });
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(server, { debug: true });
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
@@ -18,26 +16,22 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
-app.use(cors({origin: 'https://zuum.herokuapp.com'}));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use('/peerjs', peerServer);
 
 io.on('connection', (socket) => {
   socket.on("join-room", ({ roomId, peerID, userID, userName }) => {
     socket.join(roomId);
-    socket.to(roomId).broadcast.emit('userConnected', { peerID, userID, userName });
+    socket.to(roomId).emit('userConnected', { peerID, userID, userName });
     socket.on('message', (obj) => {
-      socket.to(roomId).emit('newMessage', obj)
+      io.to(roomId).emit('newMessage', obj)
     });
     socket.on('typing', (data) => {
-      socket.to(roomId).broadcast.emit('newTyper', data);
+      socket.broadcast.emit('newTyper', data);
     })
     // edited
     socket.on('hangup', ({ userID, peerID }) => {
       // edited
-      socket.to(roomId).emit('hangUp', { userID, peerID })
+      io.to(roomId).emit('hangUp', { userID, peerID })
     })
   })
 })
@@ -45,7 +39,7 @@ io.on('connection', (socket) => {
 let port = process.env.PORT || 5000;
 
 app.get('/test', (req, res) => {
-  res.send(`TEST PORT: ${port} and ENV: ${process.env.NODE_ENV}`);
+  res.send('TEST PORT: ' + port);
 })
 
 server.listen(port, () => console.log('server started at port: ' + port));
