@@ -1,7 +1,7 @@
 const express = require('express');
-const cors = require('cors');
+//const cors = require('cors');
 const app = express();
-app.use(cors());
+//app.use(cors());
 const server = require('http').Server(app);
 // const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
 //const io = require('socket.io')(server, { origins: '*', cors: { origin: '*' } });
@@ -12,6 +12,10 @@ const peerServer = ExpressPeerServer(server, { debug: true });
 
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     if (req.header('x-forwarded-proto') !== 'https')
       res.redirect(`https://${req.header('host')}${req.url}`)
     else
