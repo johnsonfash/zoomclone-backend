@@ -1,11 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
-var cors = require('cors');
 app.use(cors());
 const server = require('http').Server(app);
-const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
+// const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
 //const io = require('socket.io')(server, { origins: '*', cors: { origin: '*' } });
-//const io = require('socket.io')(server);
+const io = require('socket.io')(server);
 // const io = require('socket.io')(server, { cors: { origin: 'https://zuum.herokuapp.com', methods: ['GET', 'PUT', 'POST'] } });
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(server, { debug: true });
