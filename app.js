@@ -2,8 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://zuum.herokuapp.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next()
+})
 const server = require('http').Server(app);
-const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
+const io = require('socket.io')(server, { serveClient: false, origins: 'https://zuum.herokuapp.com', cors: { origin: 'https://zuum.herokuapp.com' } });
 //const io = require('socket.io')(server, { origins: '*', cors: { origin: '*' } });
 // const io = require('socket.io')(server);
 // const io = require('socket.io')(server, { cors: { origin: 'https://zuum.herokuapp.com', methods: ['GET', 'PUT', 'POST'] } });
@@ -12,10 +19,6 @@ const peerServer = ExpressPeerServer(server, { debug: true });
 
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://zuum.herokuapp.com');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
     if (req.header('x-forwarded-proto') !== 'https')
       res.redirect(`https://${req.header('host')}${req.url}`)
     else
