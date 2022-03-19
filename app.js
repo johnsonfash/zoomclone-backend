@@ -19,9 +19,9 @@ if (process.env.NODE_ENV === 'production') {
 app.use('/peerjs', peerServer);
 
 io.on('connection', (socket) => {
-  socket.on("join-room", (roomId, peerID, userID, userName) => {
+  socket.on("join-room", (roomId, peerID, userID, userName, userImage) => {
     socket.join(roomId);
-    socket.broadcast.to(roomId).emit('userConnected', { peerID, userID, userName });
+    socket.broadcast.to(roomId).emit('userConnected', { peerID, userID, userName, userImage });
     socket.on('message', (obj) => {
       io.to(roomId).emit('newMessage', obj)
     });
