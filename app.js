@@ -23,6 +23,20 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
+
+
+// file upload
+// let files = req.files
+// if (!req.files || Object.keys(req.files).length === 0) {
+//   return res.status(400).send('No files were uploaded.');
+// }
+// uploadPath = __dirname + '/somewhere/on/your/server/' + files[0].name; multiple select
+// uploadPath = __dirname + '/somewhere/on/your/server/' + files.input1.name; multiple input
+// uploadPath = __dirname + '/somewhere/on/your/server/' + files.input2.name;
+// files.forEach((file) => file.mv(path, (err) => console.log(err)))
+
+
+
 app.use('/peerjs', peerServer);
 
 io.on('connection', (socket) => {
