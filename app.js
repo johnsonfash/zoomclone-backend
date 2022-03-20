@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const fileUpload = require('../lib/index');
 const server = require('http').Server(app);
 // const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
 const io = require('socket.io')(server, { origins: '*', cors: { origin: '*' } });
@@ -9,8 +10,20 @@ const peerServer = ExpressPeerServer(server, { debug: true });
 
 
 app.use(cors())
+app.use(fileUpload());
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+// file upload
+// let files = req.files
+// if (!req.files || Object.keys(req.files).length === 0) {
+//   return res.status(400).send('No files were uploaded.');
+// }
+// uploadPath = __dirname + '/somewhere/on/your/server/' + files[0].name; multiple select
+// uploadPath = __dirname + '/somewhere/on/your/server/' + files.input1.name; multiple input
+// uploadPath = __dirname + '/somewhere/on/your/server/' + files.input2.name;
+// files.forEach((file) => file.mv(path, (err) => console.log(err)))
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use((req, res, next) => {
