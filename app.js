@@ -49,6 +49,12 @@ io.on('connection', (socket) => {
     socket.on('typing', (data) => {
       socket.broadcast.emit('newTyper', data);
     })
+    socket.on('mute-audio', (id, value) => {
+      socket.broadcast.emit('muted-audio', id, value)
+    })
+    socket.on('mute-video', (id, value) => {
+      socket.broadcast.emit('muted-video', id, value)
+    })
     // edited
     socket.on('hangup', (userID, peerID) => {
       // edited
