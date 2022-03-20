@@ -47,13 +47,13 @@ io.on('connection', (socket) => {
       io.to(roomId).emit('newMessage', obj)
     });
     socket.on('typing', (data) => {
-      socket.broadcast.emit('newTyper', data);
+      socket.broadcast.to(roomId).emit('newTyper', data);
     })
     socket.on('mute-audio', (id, value) => {
-      socket.emit('muted-audio', id, value)
+      socket.to(roomId).emit('muted-audio', id, value)
     })
     socket.on('mute-video', (id, value) => {
-      socket.emit('muted-video', id, value)
+      socket.to(roomId).emit('muted-video', id, value)
     })
     // edited
     socket.on('hangup', (userID, peerID) => {
