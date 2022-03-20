@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const fileUpload = require('../lib/index');
+const fileUpload = require('express-fileupload');
 const server = require('http').Server(app);
 // const io = require('socket.io')(server, { serveClient: false, origins: '*', cors: { origin: '*' } });
 const io = require('socket.io')(server, { origins: '*', cors: { origin: '*' } });
